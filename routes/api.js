@@ -1,9 +1,4 @@
-const { VehicleModel, db } = require('../../cardad-db/cardadSchema');
-
-//Set up default mongoose connection
-const mongoDB = 'mongodb://127.0.0.1:27017';
-
-db.connect(mongoDB, { dbName:"cardad", useNewUrlParser: true, useUnifiedTopology: true, user: "cardadAPI", pass: "rP&7ZxRz63uEsPe1cq426R9"},(err) => {if(err){console.log("Enable to connect to DB: " + err.message + " stack: " + err.stack);} else{console.log("Connected to DB");}});
+const { VehicleModel} = require('../../cardad-db/cardadSchema');
 
 var express = require('express');
 var router = express.Router();
