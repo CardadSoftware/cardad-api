@@ -3,7 +3,7 @@ extends layout
 block content
   .container
     h1 Register Page
-    p.lead Say something worthwhile here.
+    p.lead Please create a username and Password
     br
     form(role='form', action="/register",method="post", style='max-width: 300px;')
       .form-group
@@ -14,3 +14,5 @@ block content
       &nbsp;
       a(href='/')
         button.btn.btn-primary(type="button") Cancel
+    -if(error !== undefined)
+      p #{error.message}

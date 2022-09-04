@@ -28,6 +28,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter)
 app.use('/api/', apiRouter);
 
+// bootstrap
+app.use(
+  "/css",
+  express.static(path.join(__dirname, "node_modules/bootstrap/dist/css"))
+)
+app.use(
+  "/js",
+  express.static(path.join(__dirname, "node_modules/bootstrap/dist/js"))
+)
+app.use("/js", express.static(path.join(__dirname, "node_modules/jquery/dist")))
+
 // passport config
 var {UserModel} = require('../cardad-db/cardadSchema');
 passport.use(new LocalStrategy(UserModel.authenticate()));

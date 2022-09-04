@@ -5,7 +5,7 @@ var router = express.Router();
 const {getAccessToken} = require('./login-jwt');
 
 router.get('/', function (req, res) {
-    res.render('index', { user : req.user });
+    res.render('index', { user : req.user, title: "Cardad" });
 });
 
 router.get('/register', function(req, res) {
@@ -13,9 +13,9 @@ router.get('/register', function(req, res) {
 });
 
 router.post('/register', function(req, res) {
-    UserModel.register(new UserModel({ username : req.body.username }), req.body.password, function(err, account) {
+    UserModel.register(new UserModel( { username : req.body.username }), req.body.password, function(err, account) {
         if (err) {
-            return res.render('register', { account : account });
+            return res.render('register', { account : account, error: err });
         }
 
         passport.authenticate('local')(req, res, function () {
