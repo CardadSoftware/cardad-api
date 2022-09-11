@@ -1,5 +1,7 @@
 const { VehicleModel, ChargeModel} = require('../../cardad-db/cardadSchema');
 
+const assert = require('assert');
+
 var express = require('express');
 var router = express.Router();
 
@@ -13,6 +15,15 @@ router.post('/vehicles/addVehicle', function (req, res, next) {
   VehicleModel.create(req.body).then(saved => res.json(saved));
   
 });
+
+router.post('/charge/getCharges'){
+  if(Array.isArray(res.body)){
+
+  }
+  else{
+    
+  }
+}
 
 router.post('/charge/createCharge', function (req, res, next)
 {
