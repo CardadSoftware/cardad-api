@@ -3,12 +3,25 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const { ToadScheduler, SimpleIntervalJob, AsyncTask } = require('toad-scheduler');
+var updateMakeModel = require('./tasks/updateMakeModel');
+const scheduler = new ToadScheduler();
 
 var indexRouter = require('./routes/index');
 
 var apiRouter = require('./routes/api');
 const passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+
+// schedule task to update make model database
+const task = new AsyncTask(
+  'Update Make Models', updateMakeModel 
+  ,(err) => { console.log(err); }
+)
+
+const job = new SimpleIntervalJob({ hours: 2, runImmediately: true }, task)
+
+scheduler.addSimpleIntervalJob(job)
 
 var app = express();
 //add passport
