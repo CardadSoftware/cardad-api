@@ -13,6 +13,7 @@ return new Promise((res, rej) =>
           https.get(appSettings.apiSettings.baseUrl + '/vehicles/GetMakesForVehicleType/car?format=json', (res) => {
             console.log('statusCode:', res.statusCode);
             console.log('headers:', res.headers);
+            if(res.statusCode !== 200) return;
             var body = '';
             res.on('data', (d) => {
               body += d;
@@ -32,7 +33,16 @@ return new Promise((res, rej) =>
                   CarMakeModel.insertMany(newRecords).then(records => 
                     {
                       console.log(records.length.toString() + ' records inserted');
-                    })
+                    });
+                  var updatedRecords = existingRecords.reduce((acc, ex) => 
+                  { 
+                    var match = makesResponse.Results.find(f => f.MakeId == ex.makeId);
+                    if(ex.MakeName !== match.makeName || ex.VehicleTypeId !== match.vehicleTypeId || ex.VehicleTypeName !== match.vehicleTypeName){
+                      acc.push({ makeName: match.makeName, vehicleTypeId: match.VehicleTypeId, vehicleTypeName: match.vehicleTypeName , ...ex});
+                    }
+                  },[]);
+                  //CarMakeModel.findByIdAndUpdate(existingRecords
+
                 }
                 
               });
