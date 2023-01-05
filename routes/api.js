@@ -60,4 +60,12 @@ router.post('/charge/createCharge', function (req, res, next)
   });
 });
 
+router.post('/invoice/upload', function(req, res, next){
+  var contentDisp = req.headers['content-disposition'];
+  var data = [];
+  if(req.readable){
+  data += req.read();
+  }
+});
+
 module.exports = router;

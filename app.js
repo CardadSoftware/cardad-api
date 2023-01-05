@@ -3,14 +3,19 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+
 const { ToadScheduler, SimpleIntervalJob, AsyncTask } = require('toad-scheduler');
 var updateMakeModel = require('./tasks/updateMakeModel');
 const scheduler = new ToadScheduler();
 
 var indexRouter = require('./routes/index');
-
+// import api router
 var apiRouter = require('./routes/api');
+// import user router
+var userRouter = require('./routes/users');
+// require use of passport
 const passport = require('passport');
+var BearerStrategy = require('passport-http-bearer');
 var LocalStrategy = require('passport-local').Strategy;
 
 // schedule task to update make model database
@@ -28,6 +33,16 @@ var app = express();
 app.use(require('express-session')({ secret: 'd5eeefd1-b5a3-412f-a0ff-c1e6996a1c69', resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
+// add passport bearer for api
+passport.use(new BearerStrategy(
+  function(token, done) {
+    User.findOne({ token: token }, function (err, user) {
+      if (err) { return done(err); }
+      if (!user) { return done(null, false); }
+      return done(null, user, { scope: 'read' });
+    });
+  }
+));
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -40,6 +55,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter)
 app.use('/api/', apiRouter);
+app.use('/users/', userRouter );
 
 // bootstrap
 app.use(
