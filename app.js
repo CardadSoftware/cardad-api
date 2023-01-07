@@ -15,7 +15,9 @@ var apiRouter = require('./routes/api');
 var userRouter = require('./routes/users');
 // require use of passport
 const passport = require('passport');
+// use bearer strategy
 var BearerStrategy = require('passport-http-bearer');
+// use local strategy
 var LocalStrategy = require('passport-local').Strategy;
 
 // schedule task to update make model database
@@ -33,16 +35,6 @@ var app = express();
 app.use(require('express-session')({ secret: 'd5eeefd1-b5a3-412f-a0ff-c1e6996a1c69', resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
-// add passport bearer for api
-passport.use(new BearerStrategy(
-  function(token, done) {
-    User.findOne({ token: token }, function (err, user) {
-      if (err) { return done(err); }
-      if (!user) { return done(null, false); }
-      return done(null, user, { scope: 'read' });
-    });
-  }
-));
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -70,7 +62,17 @@ app.use("/js", express.static(path.join(__dirname, "node_modules/jquery/dist")))
 
 // passport config
 var {UserModel} = require('../cardad-db/cardadSchema');
-passport.use(new LocalStrategy(UserModel.authenticate()));
+//passport.use(new LocalStrategy(UserModel.authenticate()));
+// add passport bearer for api
+passport.use(new BearerStrategy(
+  function(token, done) {
+    User.findOne({ token: token }, function (err, user) {
+      if (err) { return done(err); }
+      if (!user) { return done(null, false); }
+      return done(null, user, { scope: 'read' });
+    });
+  }
+));
 passport.serializeUser(UserModel.serializeUser());
 passport.deserializeUser(UserModel.deserializeUser());
 
