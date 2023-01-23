@@ -13,6 +13,8 @@ var indexRouter = require('./routes/index');
 var apiRouter = require('./routes/api');
 // import user router
 var userRouter = require('./routes/users');
+// import oauth setup
+var { router: oauthRouter } = require('./OAuth/OAuthServer');
 // require use of passport
 const passport = require('passport');
 // use bearer strategy
@@ -46,6 +48,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter)
+app.use('/oauth/', oauthRouter)
 app.use('/api/', apiRouter);
 app.use('/users/', userRouter );
 
@@ -62,9 +65,9 @@ app.use("/js", express.static(path.join(__dirname, "node_modules/jquery/dist")))
 
 // passport config
 var {UserModel} = require('../cardad-db/cardadSchema');
-//passport.use(new LocalStrategy(UserModel.authenticate()));
+passport.use('passport-local',new LocalStrategy(UserModel.authenticate()));
 // add passport bearer for api
-passport.use(new BearerStrategy(
+passport.use('passport-bearer',new BearerStrategy(
   function(token, done) {
     User.findOne({ token: token }, function (err, user) {
       if (err) { return done(err); }
