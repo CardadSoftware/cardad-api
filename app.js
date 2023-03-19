@@ -14,7 +14,7 @@ var apiRouter = require('./routes/api');
 // import user router
 var userRouter = require('./routes/users');
 // import oauth setup
-var { router: oauthRouter } = require('./OAuth/OAuthServer');
+var { authorization, token, decision } = require('./OAuth/OAuthServer');
 // require use of passport
 const passport = require('passport');
 // use bearer strategy
@@ -28,9 +28,9 @@ const task = new AsyncTask(
   ,(err) => { console.log(err); }
 )
 
-const job = new SimpleIntervalJob({ hours: 2, runImmediately: true }, task)
+// const job = new SimpleIntervalJob({ hours: 2, runImmediately: true }, task)
 
-scheduler.addSimpleIntervalJob(job)
+// scheduler.addSimpleIntervalJob(job)
 
 var app = express();
 //add passport
@@ -48,7 +48,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter)
-app.use('/oauth/', oauthRouter)
+//app.use('/oauth/', oauthRouter)
 app.use('/api/', apiRouter);
 app.use('/users/', userRouter );
 
@@ -64,10 +64,11 @@ app.use(
 app.use("/js", express.static(path.join(__dirname, "node_modules/jquery/dist")))
 
 // passport config
-var {UserModel} = require('../cardad-db/cardadSchema');
-passport.use('passport-local',new LocalStrategy(UserModel.authenticate()));
+passport.use()
+//var {UserModel} = require('../cardad-db/cardadSchema');
+//passport.use('passport-local',new LocalStrategy(UserModel.authenticate()));
 // add passport bearer for api
-passport.use('passport-bearer',new BearerStrategy(
+/* passport.use('passport-bearer',new BearerStrategy(
   function(token, done) {
     User.findOne({ token: token }, function (err, user) {
       if (err) { return done(err); }
@@ -75,7 +76,7 @@ passport.use('passport-bearer',new BearerStrategy(
       return done(null, user, { scope: 'read' });
     });
   }
-));
+)); */
 passport.serializeUser(UserModel.serializeUser());
 passport.deserializeUser(UserModel.deserializeUser());
 

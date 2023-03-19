@@ -1,10 +1,18 @@
 'use strict';
 
-const oauth2orize = require('@poziworld/oauth2orize');
+const oauth2orize = require('oauth2orize');
 const passport = require('passport');
 const login = require('connect-ensure-login');
-const { UserModel } = require('../../cardad-db/cardadSchema');
-const { ClientModel } = require('../../cardad-db/cardadSchema');
+const mongoose = require("mongoose");
+
+//Set up default mongoose connection
+const mongoDB = 'mongodb://127.0.0.1:27017';
+
+const db = mongoose;
+
+db.connect(mongoDB, { dbName:"cardad", useNewUrlParser: true, useUnifiedTopology: true, user: "cardadAPI", pass: "rP&7ZxRz63uEsPe1cq426R9"},(err) => {if(err){console.log("Enable to connect to DB: " + err.message + " stack: " + err.stack);} else{console.log("Connected to DB");}});
+
+
 
 // Create OAuth 2.0 server
 const server = oauth2orize.createServer();
@@ -87,7 +95,7 @@ server.grant(oauth2orize.grant.token((client, user, ares, done) => {
 // custom parameters by adding these to the `done()` call
 
 server.exchange(oauth2orize.exchange.code((client, code, redirectUri, done) => {
-  db.authorizationCodes.find(code, (error, authCode) => {
+  d/b.authorizationCodes.find(code, (error, authCode) => {
     if (error) return done(error);
     if (client.id !== authCode.clientId) return done(null, false);
     if (redirectUri !== authCode.redirectUri) return done(null, false);
