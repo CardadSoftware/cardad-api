@@ -18,7 +18,7 @@ var { authorization, token, decision } = require('./OAuth/OAuthServer');
 // require use of passport
 const passport = require('passport');
 // use bearer strategy
-var BearerStrategy = require('passport-http-bearer');
+var BearerStrategy = require('passport-http-bearer').Strategy;
 // use local strategy
 var LocalStrategy = require('passport-local').Strategy;
 
