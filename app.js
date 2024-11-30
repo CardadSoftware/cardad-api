@@ -64,11 +64,12 @@ app.use(
 app.use("/js", express.static(path.join(__dirname, "node_modules/jquery/dist")))
 
 // passport config
-passport.use()
-//var {UserModel} = require('../cardad-db/cardadSchema');
-//passport.use('passport-local',new LocalStrategy(UserModel.authenticate()));
+//passport.use()
+var { UserModel } = require('../cardad-db/cardadSchema');
+
+passport.use('passport-local',new LocalStrategy(UserModel.authenticate()));
 // add passport bearer for api
-/* passport.use('passport-bearer',new BearerStrategy(
+passport.use('passport-bearer',new BearerStrategy(
   function(token, done) {
     User.findOne({ token: token }, function (err, user) {
       if (err) { return done(err); }
@@ -76,7 +77,7 @@ passport.use()
       return done(null, user, { scope: 'read' });
     });
   }
-)); */
+));
 passport.serializeUser(UserModel.serializeUser());
 passport.deserializeUser(UserModel.deserializeUser());
 
