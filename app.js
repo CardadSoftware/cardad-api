@@ -1,12 +1,21 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+// setup env variables
+require('dotenv').config({ path: `./environment/.env.${process.env.NODE_ENV || 'development'}` });
+
+const { connectDB } = require('cardad-db')
 
 const { ToadScheduler, SimpleIntervalJob, AsyncTask } = require('toad-scheduler');
-var updateMakeModel = require('./tasks/updateMakeModel');
+const updateMakeModel = require('./tasks/updateMakeModel');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+
 const scheduler = new ToadScheduler();
+
+// connect to db
+connectDB(process.env.MONGO_URI, { user: process.env.DB_USER, pass: process.env.DB_PASSWORD, dbName: process.env.DB_NAME });
+
 
 var indexRouter = require('./routes/index');
 // import api router
@@ -43,6 +52,8 @@ app.set('view engine', 'jade');
 
 app.use(logger('dev'));
 app.use(express.json());
+
+
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
