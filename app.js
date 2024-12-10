@@ -14,7 +14,7 @@ const logger = require('morgan');
 const scheduler = new ToadScheduler();
 
 // connect to db
-connectDB(process.env.MONGO_URI, { user: process.env.DB_USER, pass: process.env.DB_PASSWORD, dbName: process.env.DB_NAME });
+connectDB(process.env.MONGO_URI, { user: process.env.DB_USER, authSource: process.env.AUTH_DB, pass: process.env.DB_PASSWORD, dbName: process.env.DB_NAME });
 
 
 var indexRouter = require('./routes/index');
