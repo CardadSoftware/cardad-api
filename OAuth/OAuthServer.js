@@ -3,16 +3,8 @@
 const oauth2orize = require('oauth2orize');
 const passport = require('passport');
 const login = require('connect-ensure-login');
-const mongoose = require("mongoose");
-
-//Set up default mongoose connection
-const mongoDB = 'mongodb://127.0.0.1:27017';
-
-const db = mongoose;
-
-db.connect(mongoDB, { dbName:"cardad", useNewUrlParser: true, useUnifiedTopology: true, user: "cardadAPI_test", pass: "rP&7ZxRz63uEsPe1cq426R9"},(err) => {if(err){console.log("Enable to connect to DB: " + err.message + " stack: " + err.stack);} else{console.log("Connected to DB");}});
-
-
+//const { connectDB } = require('cardad-db');
+const mongoose = require('mongoose');
 
 // Create OAuth 2.0 server
 const server = oauth2orize.createServer();

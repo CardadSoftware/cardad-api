@@ -61,11 +61,12 @@ router.post('/charge/createCharge', function (req, res, next)
 });
 
 router.post('/invoice/upload', function(req, res, next){
-  var contentDisp = req.headers['content-disposition'];
+  var contentDisp = req.headers['content-disposition'] ?? req.headers['content-type'];
   var data = [];
   if(req.readable){
   data += req.read();
   }
+  res.sendStatus(200);
 });
 
 module.exports = router;

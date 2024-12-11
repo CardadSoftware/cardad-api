@@ -28,7 +28,7 @@ router.get('/login', function(req, res) {
     res.render('login', { user : req.user, redirect: req.query.redirect });
 });
 
-router.post('/login', passport.authenticate('local'), function(req, res) {
+router.post('/login', passport.authenticate('passport-local'), function(req, res) {
     if(req.query.redirect !== undefined){
         res.redirect(req.query.redirect);
     }

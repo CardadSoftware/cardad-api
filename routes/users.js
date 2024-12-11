@@ -5,7 +5,7 @@ var passport = require('passport');
 const { UserModel } = require('../../cardad-db/cardadSchema');
 
 // require authentication via passport
-router.use('/', passport.authenticate('bearer'));
+router.use('/', passport.authenticate('passport-bearer'));
 /* GET users listing. */
 router.get('/me', function(req, res, next) {
   //var body = req.body;

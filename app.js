@@ -10,6 +10,8 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const https = require('https');
+const fs = require('fs');
 
 const scheduler = new ToadScheduler();
 
@@ -107,5 +109,20 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+const baseFolder =
+  process.env.APPDATA !== undefined && process.env.APPDATA !== ''
+    ? `${process.env.APPDATA}/cardad/https`
+    : `${process.env.HOME}/.cardad/https`;
+
+const certFilePath = path.join(baseFolder, `${process.env.npm_package_name}.pem`);
+const keyFilePath = path.join(baseFolder, `${process.env.npm_package_name}.key`);
+// Assuming your cert and key files are in the same directory as your Node.js script
+const options = {
+  key: fs.readFileSync(keyFilePath),
+  cert: fs.readFileSync(certFilePath)
+};
+
+https.createServer(options,app).listen(5001)
 
 module.exports = app;

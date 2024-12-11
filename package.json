@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "dev": "nodemon --watch ../cardad-db --watch . app.js"
+    "dev": "nodemon --watch ../cardad-db --watch . app.js",
+    "pre-start": "node ./generate-https-cert.js"
   },
   "dependencies": {
     "assert": "^2.0.0",
