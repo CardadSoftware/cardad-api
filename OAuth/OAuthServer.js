@@ -1,10 +1,33 @@
 'use strict';
 
 const oauth2orize = require('oauth2orize');
-const passport = require('passport');
+
+const passport = require('passport'); 
+
+const LocalStrategy = require('passport-local').Strategy; // Or the aliased version: import { Strategy as LocalStrategy } from 'passport-local'; [1, 2, 10]
+
+const BearerStrategy = require('passport-http-bearer').Strategy; // Or the aliased version: import { Strategy as BearerStrategy } from 'passport-http-bearer'; [8, 9]
+
+const { UserModel } = require('../../cardad-db/cardadSchema');
+
 const login = require('connect-ensure-login');
 //const { connectDB } = require('cardad-db');
 const mongoose = require('mongoose');
+
+// setup passport
+passport.use('passport-local',new LocalStrategy(UserModel.authenticate()));
+// add passport bearer for api
+passport.use('passport-bearer',new BearerStrategy(
+  function(token, done) {
+    User.findOne({ token: token }, function (err, user) {
+      if (err) { return done(err); }
+      if (!user) { return done(null, false); }
+      return done(null, user, { scope: 'read' });
+    });
+  }
+));
+passport.serializeUser(UserModel.serializeUser());
+passport.deserializeUser(UserModel.deserializeUser());
 
 // Create OAuth 2.0 server
 const server = oauth2orize.createServer();
@@ -229,3 +252,5 @@ module.exports.token = [
   server.token(),
   server.errorHandler(),
 ];
+
+module.exports.passport = passport;
