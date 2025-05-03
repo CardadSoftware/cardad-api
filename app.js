@@ -16,14 +16,7 @@ const https = require('https');
 const fs = require('fs');
 
 const scheduler = new ToadScheduler();
-
-var indexRouter = require('./routes/index');
-// import api router
 var apiRouter = require('./routes/api');
-// import user router
-var userRouter = require('./routes/users');
-// import oauth setup
-var { authorization, token, decision, passport } = require('./OAuth/OAuthServer');
 
 // schedule task to update make model database
 const task = new AsyncTask(
@@ -39,16 +32,11 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(express.json());
 
-app.use(passport.initialize());
-
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/', indexRouter)
 //app.use('/oauth/', oauthRouter)
 app.use('/api/', apiRouter);
-app.use('/users/', userRouter );
 
 // bootstrap
 app.use(
@@ -60,10 +48,6 @@ app.use(
   express.static(path.join(__dirname, "node_modules/bootstrap/dist/js"))
 )
 app.use("/js", express.static(path.join(__dirname, "node_modules/jquery/dist")))
-
-// passport config
-//passport.use()
-var { UserModel } = require('../cardad-db/cardadSchema');
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
