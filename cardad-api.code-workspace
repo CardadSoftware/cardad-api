@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"name": "cardad-db",
+			"path": "../cardad-db"
+		},
+		{
+			"name": "cardad-app",
+			"path": "../cardad-app"
+		}
+	],
+	"settings": {
+	}
+}
